@@ -23,11 +23,7 @@ void md5_block_encode( byte* block)
 {
     DWORD a = A, b = B, c = C, d = D;
     DWORD*x=malloc(16*4);
-    //printf("begin decode\n");
     Decode(block, x, block_size);
-    /*for(int i=0;i<16;i++)
-        printf("%08X\n",x[i]);
-    */
     /*
         第一轮
     */
@@ -131,14 +127,10 @@ void md5_block_encode( byte* block)
 
 void Decode( byte *input, DWORD *output, size_t length)
 {
-    //printf("input0=%d\n",((DWORD)input[0])<<24);
-    //printf("%d\n",input[2]);
     for(int i=0 , j=0 ;i<length;i+=4,j++)
     {
-        //printf("%d\n",i);
-        //output[j]=input[i+3]|(((DWORD)input[i+2])<<8)|(((DWORD)input[i+1])<<16)|(((DWORD)input[i])<<24);
-        output[j]=input[i]|(((DWORD)input[i+1])<<8)|(((DWORD)input[i+2])<<16)|(((DWORD)input[i+3])<<24);
-        //printf("%d=%X\n",j,output[j]);
+        output[j]=input[i]|(((DWORD)input[i+1])<<8)|\
+        (((DWORD)input[i+2])<<16)|(((DWORD)input[i+3])<<24);
     }
     
 }

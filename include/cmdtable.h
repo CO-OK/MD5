@@ -5,15 +5,11 @@ struct CMD_TABLE{
   int (*handler) (char *,char*);
 } ;
 
-//#define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
-
 #define NR_CMD 5
 
 #ifndef oops
 #define oops(msg){perror(msg);exit(1);}            //打印出错信息
 #endif
-
-
 static int cmd_h(char*arg1,char*arg2);
 static int cmd_t(char*arg1,char*arg2);
 static int cmd_c(char*arg1,char*arg2);

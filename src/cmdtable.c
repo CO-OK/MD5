@@ -11,13 +11,16 @@ extern const DWORD A0;
 extern const DWORD B0;
 extern const DWORD C0;
 extern const DWORD D0;
+
 struct CMD_TABLE cmd_table [] = {
   { "-h", "--help information",cmd_h },
   { "-t", "--test MD5 application",cmd_t },
-  { "-c", "[file path of the file computed] \n\t\t--compute MD5 of the given file",cmd_c},
-  { "-v", "[file path of the file validated] \n\t\t--validate the integrality of a given file by manual input MD5 value",cmd_v},
-  { "-f", "[file path of the file validated] [file path of the .md5 file] \n\t\t--validate the integrality of a given file by read MD5 value from .md5 file",cmd_f},
-  /* TODO: Add more commands */
+  { "-c", "[file path of the file computed] \n\t\t--compute \
+  MD5 of the given file",cmd_c},
+  { "-v", "[file path of the file validated] \n\t\t--validate\
+  the integrality of a given file by manual input MD5 value",cmd_v},
+  { "-f", "[file path of the file validated] [file path of the\
+   .md5 file] \n\t\t--validate the integrality of a given file by read MD5 value from .md5 file",cmd_f},
 };
 
 static int cmd_h(char *arg1,char*arg2)
@@ -33,13 +36,7 @@ static int cmd_h(char *arg1,char*arg2)
 
 static int cmd_t(char*arg1,char*arg2)
 {
-    /*
-    const DWORD A0=A;
-    const DWORD B0=B;
-    const DWORD C0=C;
-    const DWORD D0=D;
-    */
-    char res[32];
+    char res[33];//结果数组
     char *a[]={
         "",
         "a",
@@ -61,11 +58,10 @@ static int cmd_t(char*arg1,char*arg2)
         sprintf(res,"%08X%08X%08X%08X",change_end(A),change_end(B),change_end(C),change_end(D));
         printf("\tMD5(\"%s\")=%s\n",a[i],res);
         free(pad);
-        A=A0;        
+        A=A0;//A0保存了A最初的值，其他的也一样        
         B=B0;
         C=C0;
         D=D0;
-        //printf("A=%08X\n",A);
     }
     return 0;
 }
@@ -84,7 +80,7 @@ static int cmd_c(char*arg1,char*arg2)
         printf("open file \"%s\" failed.\n",arg1);
         return 1;
     }
-    char res[32];
+    char res[33];
     cal_file_md5(fd,res);
     printf("The MD5 value of file %s is %s\n",arg1,res);
     return 0;
@@ -105,16 +101,16 @@ static int cmd_v(char*arg1,char*arg2)
         return 1;
     }
     //读取输入的md5字符串
-    byte read_arr[32];
+    byte read_arr[33];
+    read_arr[32]='\0';
     printf("input MD5 value of file (\"%s\"):\n",arg1);
     while(read(0,read_arr,32)!=32)
     {
         printf("You must input correct MD5 format string.\n");
         printf("input MD5 value of file (\"%s\"):\n",arg1);
     }
-    
-    
-    char res[32];
+    char res[33];
+    res[32]='\0';
     cal_file_md5(fd,res);
     for(int i=0;i<32;i++)
     {
@@ -152,10 +148,12 @@ static int cmd_f(char*arg1,char*arg2)
         return 1;
     }
     //对测试文件计算md5
-    char res_test[32];
+    char res_test[33];
+    res_test[32]='\0';
     cal_file_md5(fd_test,res_test);
     //读取md5 file中的值
-    char res_md5[32];
+    char res_md5[33];
+    res_test[32]='\0';
     if(read(fd_MD5,res_md5,32)!=32)
     {
         printf("read file \"%s\" failed\n",arg2);
@@ -172,8 +170,7 @@ static int cmd_f(char*arg1,char*arg2)
         }
     }
     printf("The file \"%s\" is integrated\n",arg1);
-    return 0;
-    
+    return 0; 
 }
 
 void cal_file_md5(int fd,char*res)
